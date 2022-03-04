@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace CodeFirstEF_MVVM
 {
-    public class ShopeContext : DbContext
+    public class ShopContext : DbContext
     {
-        public ShopeContext()
+        public ShopContext()
             : base("name=ShopContext")
         {
         }
         public virtual DbSet<Product> Products { get; set; }
     }
-
+    // enable-migrations консольная комманда
 }

@@ -6,8 +6,68 @@
         xmlns:local="clr-namespace:CodeFirstEF_MVVM"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="278,113,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+    <Window.DataContext>
+        <local:ViewModel></local:ViewModel>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <!--Шаблон вывода продуктов на экран-->
+        <DataTemplate x:Key="ProductInfoTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
+                <Label Content="{Binding Path=Name, 
+                            UpdateSourceTrigger=PropertyChanged}" FontSize="16"></Label>
+
+                <Label Grid.Column="1" 
+                               Content="{Binding Path=Price, UpdateSourceTrigger=PropertyChanged}"></Label>
+                <Label Grid.Column="2">рублей</Label>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <!--Колонки и ряды-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--Строка поиска-->
+        <TextBox Text="{Binding FindText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+        <!--Радио батоны для сортировки продуктов-->
+        <StackPanel Orientation="Horizontal"  Grid.Column="1">
+            <RadioButton IsChecked="{Binding Rb2, UpdateSourceTrigger=PropertyChanged}" Margin="3">Сортировать по цене</RadioButton>
+            <RadioButton IsChecked="{Binding Rb1, UpdateSourceTrigger=PropertyChanged}" Margin="3">Сортировать по названию</RadioButton>
+            <RadioButton IsChecked="{Binding Rb3, UpdateSourceTrigger=PropertyChanged}" Margin="3">Сортировать по категории</RadioButton>
+        </StackPanel>
+
+        <!--1.Продукты которые хранятся в бд-->
+        <!--2.Выбрать продукт и записать в переменную-->
+        <ListBox ItemsSource="{Binding Products , UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" SelectedItem="{Binding SelectedItem}" ItemTemplate="{StaticResource ProductInfoTemplate}"></ListBox>
+
+        <!--Корзина в которой хранятся купленные продукты-->
+        <ListBox ItemsSource="{Binding Path=ClientProducts, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource ProductInfoTemplate}" Grid.Row="1" Grid.Column="1"></ListBox>
+
+        <!--Кнопка купить. Перемещает продукт из левой колонки в корзину-->
+        <Button Command="{Binding BuyProduct, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" >Купить</Button>
+
+        <!--Не реализованные кнопки-->
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <Button Width="150" >Отменить</Button>
+            <Button Width="150" >Чек</Button>
+            <Button Command="{Binding AddButton, UpdateSourceTrigger=PropertyChanged}" Width="150">Добавить позицию</Button>
+            <Button Width="150" >Изменить позицию</Button>
+        </StackPanel>
     </Grid>
 </Window>
