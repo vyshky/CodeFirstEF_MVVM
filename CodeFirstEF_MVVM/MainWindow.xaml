@@ -9,7 +9,7 @@
     <Window.DataContext>
         <local:ViewModel></local:ViewModel>
     </Window.DataContext>
-    
+
     <Window.Resources>
         <!--Шаблон вывода продуктов на экран-->
         <DataTemplate x:Key="ProductInfoTemplate">
@@ -64,10 +64,11 @@
 
         <!--Не реализованные кнопки-->
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-            <Button Width="150" >Отменить</Button>
-            <Button Width="150" >Чек</Button>
+            <Button Command="{Binding Cancel, UpdateSourceTrigger=PropertyChanged}" Width="110" >Отменить</Button>
+            <Button Command="{Binding Order, UpdateSourceTrigger=PropertyChanged}" Width="110" >Чек</Button>
             <Button Command="{Binding AddButton, UpdateSourceTrigger=PropertyChanged}" Width="150">Добавить позицию</Button>
-            <Button Width="150" >Изменить позицию</Button>
+            <Button Command="{Binding UpdatePosition, UpdateSourceTrigger=PropertyChanged}" Width="120" >Изменить позицию</Button>
+            <Button Command="{Binding DeleteButton, UpdateSourceTrigger=PropertyChanged}" Width="110" >Удалить</Button>
         </StackPanel>
     </Grid>
 </Window>

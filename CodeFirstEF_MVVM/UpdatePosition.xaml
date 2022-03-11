@@ -1,0 +1,27 @@
+﻿<Window x:Class="CodeFirstEF_MVVM.UpdatePosition"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CodeFirstEF_MVVM"
+        mc:Ignorable="d"
+        Title="UpdatePosition" Height="300" Width="400">
+    <Window.DataContext>
+        <local:AddPositionViewModel></local:AddPositionViewModel>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel>
+            <Label Margin="5">Наименование</Label>
+            <TextBox Text="{Binding Name ,UpdateSourceTrigger=PropertyChanged}" Margin="5"></TextBox>
+            <Label Margin="5">Цена</Label>
+            <TextBox Text="{Binding Price ,UpdateSourceTrigger=PropertyChanged}" Margin="5"></TextBox>
+            <Label Margin="5">Категория</Label>
+            <ComboBox Text="{Binding Category ,UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding Categories,UpdateSourceTrigger=PropertyChanged}"
+                      IsEditable="True"
+                      Margin="5"></ComboBox>
+            <Button Command="{Binding UpdateButton,UpdateSourceTrigger=PropertyChanged}" Margin="5">Изменить</Button>
+            <Button Command="{Binding CloseButton,UpdateSourceTrigger=PropertyChanged}" Margin="5">Отметить</Button>
+        </StackPanel>
+    </Grid>
+</Window>

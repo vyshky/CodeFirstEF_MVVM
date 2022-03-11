@@ -27,7 +27,9 @@ namespace CodeFirstEF_MVVM
         ShopContext myShop;
         List<Product> products;
         List<Product> clientProducts;
-        Product selectedItem;
+        public static Product selectedItem;
+        public static AddPosition addPosition;
+        public static UpdatePosition updatePosition;
 
 
         public bool Rb
@@ -122,20 +124,115 @@ namespace CodeFirstEF_MVVM
                 return new ButtonsCommand(
               () =>
               {
-                  ShopContext shopContext = new ShopContext();
-                  shopContext.Products.Add(new Product()
-                  {
-                      Name = "Свекла",
-                      Price = 50,
-                      Category = "Овощь"
-                  });
-                  shopContext.SaveChanges();
-                  MessageBox.Show("Выполнено");
+                  addPosition = new AddPosition();
+                  addPosition.ShowDialog();
+                  RefreshData();
               }
               );
             }
         }
 
+        public ICommand UpdatePosition
+        {
+            get
+            {
+                return new ButtonsCommand(
+              () =>
+              {
+                  updatePosition = new UpdatePosition();
+                  updatePosition.ShowDialog();
+                  RefreshData();
+              }
+              );
+            }
+        }
+
+        public ICommand DeleteButton
+        {
+            get
+            {
+                return new ButtonsCommand(
+              () =>
+              {
+                  if (selectedItem != null)
+                  {
+                      MessageBoxResult result = MessageBox.Show($"Действительно удалить продукт {SelectedItem.Id} - {SelectedItem.Name}", "Удалить",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+                      if (result == MessageBoxResult.Yes)
+                      {
+                          myShop.Products.Remove(SelectedItem);
+                          myShop.SaveChanges();
+                          RefreshData();
+                      }
+                  }
+              }
+              );
+            }
+        }
+
+        // Cancel
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        public ICommand Cancel
+        {
+            get
+            {
+                return new ButtonsCommand(
+                    () =>
+                    {
+                        if (ClientProducts.Count != 0)
+                        {
+                            ClientProducts = new List<Product>();
+                        }
+                    }
+                    );
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+
+        //Order
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        public ICommand Order
+        {
+            get
+            {
+                return new ButtonsCommand(
+                    () =>
+                    {
+                        SortedDictionary<int, double> dictionary = new SortedDictionary<int, double>();
+
+                        for (int i = 0; i < ClientProducts.Count(); ++i)
+                        {
+                            if (!dictionary.ContainsKey(ClientProducts[i].Id))
+                            {
+                                dictionary.Add(ClientProducts[i].Id, ClientProducts[i].Price);
+                            }
+                            else
+                            {
+                                dictionary[ClientProducts[i].Id] += ClientProducts[i].Price;
+                            }
+                        }
+
+                        string orderString = string.Empty;
+
+                        foreach (var diction in dictionary)
+                        {
+                            var clientPoductOne = ClientProducts.Where(prod => prod.Id == diction.Key).Take(1);
+                            var count = ClientProducts.Where(prod => prod.Id == diction.Key).Count();
+                            foreach (var product in clientPoductOne)
+                            {
+                                orderString += $"id - {product.Id}, count - {count}, name - {product.Name}, price - {product.Price}\n";
+                            }
+                        }
+
+                        MessageBox.Show($"{orderString}");
+                    }
+                    );
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Реализуйте кнопку «Купить».
         //При нажатии на кнопку, выделенный товар должен добавляться во второй listbox
@@ -147,13 +244,21 @@ namespace CodeFirstEF_MVVM
                 return new ButtonsCommand(
               () =>
               {
-                  clientProducts.Add(selectedItem);
-                  List<Product> clone = new List<Product>(clientProducts.Count);
-                  clientProducts.ForEach((index) => { clone.Add(index); });
-                  ClientProducts = clone;
+                  if (selectedItem != null)
+                  {
+                      clientProducts.Add(selectedItem);
+                      List<Product> clone = new List<Product>(clientProducts.Count);
+                      clientProducts.ForEach((index) => { clone.Add(index); });
+                      ClientProducts = clone;
+                  }
               }
               );
             }
+        }
+
+        public void NewMethod()
+        {
+            ClientProducts = new List<Product>();
         }
 
         public List<Product> ClientProducts

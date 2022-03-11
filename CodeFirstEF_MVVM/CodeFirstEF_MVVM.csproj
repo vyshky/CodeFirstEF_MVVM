@@ -67,7 +67,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ButtonsCommand.cs" />
+    <Compile Include="UpdatePosition.xaml.cs">
+      <DependentUpon>UpdatePosition.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\ButtonsCommand.cs" />
+    <Compile Include="ViewModel\AddPositionViewModel.cs" />
     <Compile Include="Migrations\202202270916299_InitialCreate.cs" />
     <Compile Include="Migrations\202202270916299_InitialCreate.designer.cs">
       <DependentUpon>202202270916299_InitialCreate.cs</DependentUpon>
@@ -77,13 +81,19 @@
       <DependentUpon>202202271013263_addCategoryByProduct.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Products.cs" />
     <Compile Include="ShopeDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShopeDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="AddPosition.xaml.cs">
+      <DependentUpon>AddPosition.xaml</DependentUpon>
+    </Compile>
+    <Page Include="UpdatePosition.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,10 +106,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="AddPosition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ShopeContext.cs" />
-    <Compile Include="Product.cs" />
+    <Compile Include="Model\ShopeContext.cs" />
+    <Compile Include="Model\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
